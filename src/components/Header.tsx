@@ -7,6 +7,14 @@ import NewStylishButton from './NewStylishButton';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './AnimatedLogo';
 
+const HeaderWrapper = styled('header')({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  zIndex: 1100, // Assurez-vous que c'est plus élevé que le z-index de la page d'accueil
+  // ... autres styles
+});
 
 const StyledAppBar = styled(AppBar)<{ bgcolor: string }>(({ bgcolor }) => ({
   backgroundColor: `${bgcolor}CC`,
@@ -109,50 +117,52 @@ const Header: React.FC = () => {
   }));
 
   return (
-    <StyledAppBar position="static" bgcolor={colors.primary}>
-      <StyledToolbar>
-        <LogoContainer>
-          <AnimatedLogo />
-          <Title variant="h1" textcolor={getTitleColor()}>boldpixel</Title>
-        </LogoContainer>
-        <ButtonContainer>
-          <NavButton textcolor={colors.primary} onClick={() => navigate('/')}>Accueil</NavButton>
-          <NavButton textcolor={colors.primary} onClick={() => navigate('/services')}>Services</NavButton>
-          <NavButton textcolor={colors.primary} onClick={() => navigate('/pricing')}>Tarifs</NavButton>
-          <NavButton textcolor={colors.primary} onClick={() => navigate('/portfolio')}>Portfolio</NavButton>
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            aria-label="menu"
-            onClick={handleMenu}
+    <HeaderWrapper>
+      <StyledAppBar position="static" bgcolor={colors.primary}>
+        <StyledToolbar>
+          <LogoContainer>
+            <AnimatedLogo />
+            <Title variant="h1" textcolor={getTitleColor()}>boldpixel</Title>
+          </LogoContainer>
+          <ButtonContainer>
+            <NavButton textcolor={colors.primary} onClick={() => navigate('/')}>Accueil</NavButton>
+            <NavButton textcolor={colors.primary} onClick={() => navigate('/services')}>Services</NavButton>
+            <NavButton textcolor={colors.primary} onClick={() => navigate('/pricing')}>Tarifs</NavButton>
+            <NavButton textcolor={colors.primary} onClick={() => navigate('/portfolio')}>Portfolio</NavButton>
+            <IconButton
+              size="large"
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleMenu}
+            >
+              <MenuIcon />
+            </IconButton>
+          </ButtonContainer>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                backgroundColor: colors.background,
+                color: colors.text,
+              },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-        </ButtonContainer>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          PaperProps={{
-            style: {
-              backgroundColor: colors.background,
-              color: colors.text,
-            },
-          }}
-        >
-          <MenuItem onClick={() => handleThemeChange('blue')}>
-            <ColorBubble color="#3f51b5" />
-          </MenuItem>
-          <MenuItem onClick={() => handleThemeChange('pink')}>
-            <ColorBubble color="#f50057" />
-          </MenuItem>
-          <MenuItem onClick={() => handleThemeChange('green')}>
-            <ColorBubble color="#4caf50" />
-          </MenuItem>
-        </Menu>
-      </StyledToolbar>
-    </StyledAppBar>
+            <MenuItem onClick={() => handleThemeChange('blue')}>
+              <ColorBubble color="#3f51b5" />
+            </MenuItem>
+            <MenuItem onClick={() => handleThemeChange('pink')}>
+              <ColorBubble color="#f50057" />
+            </MenuItem>
+            <MenuItem onClick={() => handleThemeChange('green')}>
+              <ColorBubble color="#4caf50" />
+            </MenuItem>
+          </Menu>
+        </StyledToolbar>
+      </StyledAppBar>
+    </HeaderWrapper>
   );
 };
 
