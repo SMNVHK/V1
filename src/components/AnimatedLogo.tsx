@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
-import { keyframes } from '@emotion/react';
 import { useTheme } from './ThemeSwitch';
+import { Link } from 'react-router-dom';
+
+interface AnimatedLogoProps {
+  isHovered: boolean;
+}
 
 const LogoWrapper = styled(motion.div)({
   position: 'relative',
-  width: '204px', // Remettre à la taille d'origine
-  height: '204px', // Remettre à la taille d'origine
+  width: '204px',
+  height: '204px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -23,68 +27,52 @@ const LogoImage = styled(motion.img)({
   zIndex: 2,
 });
 
-const MenuContainer = styled(motion.div)({
+const MenuContainer = styled(motion.div)<{ bgcolor: string }>(({ bgcolor }) => ({
   position: 'absolute',
-  left: '100%',
-  top: '35%',
+  left: '94%',
+  top: 'calc(35% + 5px)', // Ajouté 1px ici
+  transform: 'translateX(-50%)',
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  zIndex: 3,
-  transform: 'scale(0.5)', // Réduire la taille de moitié
-  transformOrigin: 'top left', // Point d'origine de la transformation
-});
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 999, // Réduisez cette valeur pour qu'elle soit inférieure au z-index du header
+  padding: '2px 10px',
+  backgroundColor: bgcolor,
+  borderRadius: '0 0 5px 5px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  whiteSpace: 'nowrap',
+}));
 
-const MenuItem = styled(motion.div)<{ bgcolor: string; bordercolor: string }>(({ bgcolor, bordercolor }) => ({
-  margin: '5px 0',
-  padding: '4px 6px', // Réduire le padding
-  background: bgcolor,
-  border: `1px solid ${bordercolor}`,
-  boxShadow: `0 0 5px ${bordercolor}`, // Réduire l'ombre
-  borderRadius: '0px', // Supprimer le border-radius
+const MenuItem = styled(motion(Link))<{ textcolor: string }>(({ textcolor }) => ({
+  margin: '0 5px',
+  padding: '2px 5px',
+  color: textcolor,
+  textDecoration: 'none',
+  fontSize: '0.8rem',
+  fontWeight: 'bold',
   cursor: 'pointer',
+  zIndex: 999, // Assurez-vous que cette valeur est inférieure au z-index du header
+  position: 'relative',
   overflow: 'hidden',
-  position: 'relative',
-  width: 'fit-content',
-  whiteSpace: 'nowrap', // Assurer que le texte reste sur une seule ligne
+  fontFamily: '"Space Grotesk", sans-serif',
+  letterSpacing: '-0.5px',
+  textShadow: '0 0 3px rgba(97, 218, 251, 0.5)',
 }));
 
-const MenuItemContent = styled(motion.div)({
-  padding: '5px 10px',
-  position: 'relative',
-  zIndex: 2,
-});
-
-const Projector = styled(motion.div)<{ gradient: string }>(({ gradient }) => ({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  background: gradient,
-  zIndex: 1,
-}));
-
-const projectorEffect = keyframes`
-  0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
-  100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-`;
-
-const AnimatedLogo: React.FC = () => {
-  const [isHovered, setIsHovered] = useState(false);
+const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ isHovered }) => {
   const { colors } = useTheme();
 
   const menuItems = [
-    { text: 'NOTRE ÉQUIPE' },
-    { text: 'NOUS CONTACTER' },
-    { text: 'NOS PROJETS' },
+    { text: 'L\'ÉQUIPE', link: '/team' },
+    { text: 'LE CONTACT', link: '/contact' },
+    { text: 'LES PROJETS', link: '/projects' },
   ];
 
+  const headerColor = `${colors.primary}CC`;
+
   return (
-    <LogoWrapper
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <LogoWrapper>
       <LogoImage
         src="/images/boldpixel-logo.png"
         alt="BoldPixel Logo"
@@ -96,38 +84,29 @@ const AnimatedLogo: React.FC = () => {
       <AnimatePresence>
         {isHovered && (
           <MenuContainer
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
+            className="mouse-hover-menu"
+            bgcolor={headerColor}
+            initial={{ opacity: 0, y: -6, scaleY: 0 }} // Changé de -5 à -6
+            animate={{ opacity: 1, y: 1, scaleY: 1 }} // Ajouté 1px ici
+            exit={{ opacity: 0, y: -6, scaleY: 0 }} // Changé de -5 à -6
+            transition={{ duration: 0.2, ease: "easeInOut" }}
           >
             {menuItems.map((item, index) => (
               <MenuItem
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                to={item.link}
+                textcolor={colors.text}
+                initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
+                exit={{ opacity: 0, y: -5 }}
                 transition={{ 
-                  duration: 0.5, 
-                  delay: index * 0.1,
+                  duration: 0.15, 
+                  delay: index * 0.03,
                 }}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: `0 0 20px ${colors.primary}`,
-                }}
-                bgcolor={`rgba(${parseInt(colors.primary.slice(1, 3), 16)}, ${parseInt(colors.primary.slice(3, 5), 16)}, ${parseInt(colors.primary.slice(5, 7), 16)}, 0.1)`}
-                bordercolor={colors.primary}
               >
-                <Projector
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  style={{ animation: `${projectorEffect} 0.5s ${index * 0.1}s forwards` }}
-                  gradient={`linear-gradient(45deg, ${colors.primary}33, ${colors.primary}1A)`}
-                />
-                <MenuItemContent>
-                  <Typography variant="body2" style={{ fontFamily: 'Manrope, sans-serif' }}>{item.text}</Typography>
-                </MenuItemContent>
+                <Typography variant="body2" style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.5px' }}>
+                  {item.text}
+                </Typography>
               </MenuItem>
             ))}
           </MenuContainer>

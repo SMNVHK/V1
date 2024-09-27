@@ -7,22 +7,26 @@ import { useTheme } from '../components/ThemeSwitch';
 import StylishButton from '../components/StylishButton';
 
 const PageContent = styled('div')({
-  paddingTop: '120px',
   minHeight: '100vh',
+  position: 'relative',
+  zIndex: 1,
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 const ContentFrame = styled('div')(({ theme }) => ({
   position: 'relative',
-  zIndex: 3,
+  zIndex: 10,
   padding: '2rem',
   borderRadius: '15px',
   backgroundColor: 'rgba(255, 255, 255, 0.1)',
   backdropFilter: 'blur(10px)',
   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
   border: '1px solid rgba(255, 255, 255, 0.3)',
-  color: 'white',
+  color: theme.palette.text.primary,
   marginBottom: theme.spacing(4),
   marginTop: theme.spacing(4),
+  flex: 1,
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -66,12 +70,13 @@ const Portfolio: React.FC = () => {
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
+      style={{ minHeight: '100vh', paddingTop: '80px' }}
     >
-      <VideoBackground />
+      <VideoBackground style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1 }} />
       <PageContent>
         <Container>
           <ContentFrame>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h2" gutterBottom style={{ color: colors.text }}>
               Notre Portfolio
             </Typography>
             <Grid container spacing={4}>
@@ -81,7 +86,7 @@ const Portfolio: React.FC = () => {
                     whileHover="hover"
                     variants={projectVariants}
                   >
-                    <StyledPaper>
+                    <StyledPaper style={{ backgroundColor: colors.background, color: colors.text }}>
                       <Typography variant="h5" gutterBottom>
                         {project.title}
                       </Typography>

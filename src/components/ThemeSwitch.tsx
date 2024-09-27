@@ -20,7 +20,7 @@ const themeColors: Record<Theme, ThemeColors> = {
     primary: '#FF69B4',
     secondary: '#FF1493',
     background: '#FFC0CB',
-    text: '#000000',
+    text: '#000000', // Changé en noir pour le thème rose
   },
   green: {
     primary: '#4CAF50',

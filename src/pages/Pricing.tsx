@@ -14,11 +14,11 @@ const ContentFrame = styled('div')(({ theme }) => ({
   zIndex: 3,
   padding: '2rem',
   borderRadius: '15px',
-  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  backgroundColor: theme.palette.background.paper, // Utilisation de la couleur de fond du thème
   backdropFilter: 'blur(10px)',
   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
   border: '1px solid rgba(255, 255, 255, 0.3)',
-  color: 'white',
+  color: theme.palette.text.primary, // Utilisation de la couleur de texte du thème
   marginBottom: theme.spacing(4),
   marginTop: theme.spacing(4),
 }));
@@ -26,9 +26,9 @@ const ContentFrame = styled('div')(({ theme }) => ({
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   textAlign: 'center',
-  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  backgroundColor: theme.palette.background.paper, // Utilisation de la couleur de fond du thème
   backdropFilter: 'blur(10px)',
-  color: 'white',
+  color: theme.palette.text.primary, // Utilisation de la couleur de texte du thème
 }));
 
 const Pricing: React.FC = () => {

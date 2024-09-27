@@ -3,16 +3,17 @@ import { AppBar, Toolbar, IconButton, Menu, MenuItem, Box, Typography } from '@m
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
 import { useTheme } from './ThemeSwitch';
-import NewStylishButton from './NewStylishButton';
 import { useNavigate } from 'react-router-dom';
 import AnimatedLogo from './AnimatedLogo';
+import { motion } from 'framer-motion';
 
 const HeaderWrapper = styled('header')({
   position: 'fixed',
   top: 0,
   left: 0,
   right: 0,
-  zIndex: 1100, // Assurez-vous que c'est plus élevé que le z-index de la page d'accueil
+  zIndex: 1100, // Cette valeur doit être supérieure au z-index du menu déroulant
+  height: '80px', // Assurez-vous que cette hauteur correspond à votre design
   // ... autres styles
 });
 
@@ -20,7 +21,7 @@ const StyledAppBar = styled(AppBar)<{ bgcolor: string }>(({ bgcolor }) => ({
   backgroundColor: `${bgcolor}CC`,
   backdropFilter: 'blur(10px)',
   boxShadow: 'none',
-  zIndex: 1000,
+  zIndex: 1100, // Assurez-vous que cette valeur est supérieure au z-index du menu déroulant
   height: '80px',
   display: 'flex',
   justifyContent: 'center',
@@ -37,29 +38,30 @@ const LogoContainer = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   position: 'absolute',
-  top: '6px',
-  left: '40px',
+  top: '3px', // Remonter de 3 pixels
+  left: '5px', // Décalé encore plus à gauche
   zIndex: 1001,
 });
 
-const Title = styled(Typography)<{ textcolor: string }>(({ textcolor }) => ({
+const Title = styled(motion.div)<{ textcolor: string }>(({ textcolor }) => ({
   fontWeight: 'bold',
   fontSize: '76px',
   color: textcolor,
-  textShadow: '0 0 10px rgba(97, 218, 251, 0.5)',
-  marginLeft: '-5px',
+  textShadow: '0 0 5px rgba(97, 218, 251, 0.3)', // Diminuer l'intensité du glow
+  marginLeft: '-15px',
   marginTop: '-139px',
-  
   fontFamily: '"Space Grotesk", sans-serif',
-  letterSpacing: '-8px', // Réduire l'espacement entre les lettres
+  letterSpacing: '-8px',
+  cursor: 'pointer', // Ajouté pour indiquer que c'est interactif
 }));
 
 const ButtonContainer = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   marginLeft: 'auto',
+  marginRight: '40px', // Ajouté pour déplacer les boutons vers la gauche
   '& > *': {
-    marginLeft: '10px',
+    marginLeft: '20px', // Augmenté l'espacement entre les boutons
   },
 });
 
@@ -74,6 +76,7 @@ const ColorBubble = styled('div')<{ color: string }>(({ color }) => ({
 type ThemeType = 'blue' | 'pink' | 'green';
 
 const Header: React.FC = () => {
+  const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { setTheme, colors, currentTheme } = useTheme();
   const navigate = useNavigate();
@@ -94,9 +97,21 @@ const Header: React.FC = () => {
   const getTitleColor = () => {
     switch (currentTheme) {
       case 'blue':
+      case 'green':
         return '#ffffff';
       case 'pink':
         return '#000000';
+      default:
+        return '#61dafb';
+    }
+  };
+
+  const getThemeColor = () => {
+    switch (currentTheme) {
+      case 'blue':
+        return '#61dafb';
+      case 'pink':
+        return '#FF1493'; // Rose plus foncé pour une meilleure visibilité
       case 'green':
         return '#00FF00';
       default:
@@ -104,31 +119,82 @@ const Header: React.FC = () => {
     }
   };
 
-  const NavButton = styled(NewStylishButton)<{ textcolor: string }>(({ textcolor }) => ({
+  const NavButton = styled(motion.div)<{ textcolor: string; themecolor: string }>(({ textcolor, themecolor }) => ({
     fontWeight: 'bold',
-    fontSize: '16px', // Plus petit que le titre
+    fontSize: '20px', // Augmenté encore la taille de la police
     color: textcolor,
-    textShadow: '0 0 10px rgba(97, 218, 251, 0.5)',
+    textShadow: '0 0 3px rgba(97, 218, 251, 0.5)',
     fontFamily: '"Space Grotesk", sans-serif',
-    marginLeft: '10px',
-    '&:hover': {
-      color: '#61dafb', // Couleur de survol
+    letterSpacing: '-0.5px',
+    cursor: 'pointer',
+    padding: '8px 16px', // Ajout de padding pour agrandir le bouton
+    position: 'relative',
+    overflow: 'hidden',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      width: '100%',
+      height: '2px',
+      background: themecolor, // Utilisation de la couleur du thème
+      transform: 'scaleX(0)',
+      transformOrigin: 'right',
+      transition: 'transform 0.3s ease',
+    },
+    '&:hover::after': {
+      transform: 'scaleX(1)',
+      transformOrigin: 'left',
     },
   }));
+
+  const buttonVariants = {
+    hover: (themecolor: string) => ({
+      backgroundColor: `${themecolor}1A`, // Ajout d'une transparence de 10%
+      transition: { duration: 0.3 }
+    }),
+    tap: (themecolor: string) => ({
+      backgroundColor: `${themecolor}33`, // Ajout d'une transparence de 20%
+      transition: { duration: 0.1 }
+    })
+  };
 
   return (
     <HeaderWrapper>
       <StyledAppBar position="static" bgcolor={colors.primary}>
         <StyledToolbar>
-          <LogoContainer>
-            <AnimatedLogo />
-            <Title variant="h1" textcolor={getTitleColor()}>boldpixel</Title>
+          <LogoContainer
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <AnimatedLogo isHovered={isHovered} />
+            <Title 
+              className="boldpixel-title"
+              textcolor={getTitleColor()}
+              animate={{
+                filter: isHovered ? `brightness(1.2) drop-shadow(0 0 15px white)` : 'brightness(1)',
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              boldpixel
+            </Title>
           </LogoContainer>
           <ButtonContainer>
-            <NavButton textcolor={colors.primary} onClick={() => navigate('/')}>Accueil</NavButton>
-            <NavButton textcolor={colors.primary} onClick={() => navigate('/services')}>Services</NavButton>
-            <NavButton textcolor={colors.primary} onClick={() => navigate('/pricing')}>Tarifs</NavButton>
-            <NavButton textcolor={colors.primary} onClick={() => navigate('/portfolio')}>Portfolio</NavButton>
+            {['ACCUEIL', 'SERVICES', 'TARIFS', 'PORTFOLIO'].map((text, index) => (
+              <NavButton
+                key={index}
+                className="header-menu"
+                textcolor={colors.text}
+                themecolor={getThemeColor()} // Ajout de la couleur du thème
+                onClick={() => navigate(text === 'ACCUEIL' ? '/' : `/${text.toLowerCase()}`)}
+                variants={buttonVariants}
+                custom={getThemeColor()} // Passage de la couleur du thème aux variants
+                whileHover="hover"
+                whileTap="tap"
+              >
+                {text}
+              </NavButton>
+            ))}
             <IconButton
               size="large"
               edge="end"

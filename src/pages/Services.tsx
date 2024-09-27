@@ -7,8 +7,8 @@ import StylishButton from '../components/StylishButton';
 import { useTheme } from '../components/ThemeSwitch';
 
 const PageContent = styled('div')({
-  paddingTop: '120px',
-  minHeight: '100vh',
+  paddingTop: '0', // Supprimer le padding supplémentaire
+  minHeight: 'calc(100vh - 80px)', // Optionnel: ajuster la hauteur si nécessaire
   position: 'relative',
   zIndex: 1,
 });

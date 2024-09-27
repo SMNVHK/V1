@@ -12,6 +12,7 @@ import Portfolio from './pages/Portfolio';
 import { ThemeProvider } from './components/ThemeSwitch';
 import { createGlobalStyle } from 'styled-components';
 
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -22,7 +23,14 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Roboto, Arial, sans-serif',
+    fontFamily: '"Roboto Condensed", "Arial", sans-serif',
+    fontWeightLight: 300,
+    body1: {
+      fontWeight: 300,
+    },
+    body2: {
+      fontWeight: 300,
+    },
   },
 });
 
@@ -32,6 +40,7 @@ const AppWrapper = styled('div')({
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
+  paddingTop: '80px', // Ajout de cette ligne
 });
 
 const GlassEffect = styled('div')({
@@ -41,51 +50,19 @@ const GlassEffect = styled('div')({
   width: '100%',
   height: '100%',
   background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%)',
-  backdropFilter: 'blur(2px)', // Réduction légère du flou
-  zIndex: 1,
-  pointerEvents: 'none', // Permet de cliquer à travers cette couche
+  backdropFilter: 'blur(2px)',
+  zIndex: 0, // Changé de 1 à 0
+  pointerEvents: 'none',
 });
 
-const ContentWrapper = styled('div')({
-  flex: 1,
-  overflow: 'auto',
+const PageContent = styled('div')({
+  fontFamily: '"Roboto Condensed", Arial, sans-serif',
+  fontWeight: 300,
+  paddingTop: '0', // Changé de 80px à 0
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
 });
-
-const GlobalStyle = createGlobalStyle`
-  @keyframes fadeInOut {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
-  @keyframes fadeOutIn {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  body {
-    overflow-x: hidden;
-  }
-
-  .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  .blue-purple {
-    background: linear-gradient(to right, #1D2B64, #F8CDDA);
-    animation: fadeInOut 25s ease infinite;
-  }
-
-  .green-blue {
-    background: linear-gradient(to right, #43cea2, #185a9d);
-    animation: fadeOutIn 25s ease infinite;
-  }
-`;
 
 const App: React.FC = () => {
   return (
@@ -94,15 +71,17 @@ const App: React.FC = () => {
         <CssBaseline />
         <Router>
           <AppWrapper>
-            <Header /> {/* Assurez-vous que le Header est inclus ici */}
-            <ContentWrapper>
+            <AnimatedBackground />
+            <GlassEffect />
+            <Header />
+            <PageContent>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/portfolio" element={<Portfolio />} />
               </Routes>
-            </ContentWrapper>
+            </PageContent>
           </AppWrapper>
         </Router>
       </MuiThemeProvider>

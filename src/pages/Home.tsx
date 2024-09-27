@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Typography, Container, Grid, Paper } from '@mui/material';
+import { Typography, Container, Grid, Paper, Button, Card } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import StylishButton from '../components/StylishButton';
 import AnimatedBackground from '../components/AnimatedBackground';
@@ -59,7 +59,10 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const PageContent = styled('div')({
-  paddingTop: '120px', // Augmenté de 80px à 120px
+  paddingTop: '0',
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 const ContentFrame = styled('div')(({ theme }) => ({
@@ -75,6 +78,36 @@ const ContentFrame = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(4),
   marginTop: theme.spacing(4), // Ajout d'une marge en haut
 }));
+
+const StyledCard = styled(Card)(({ theme }) => {
+  const { colors, currentTheme } = useTheme();
+  
+  const getCardBackgroundColor = () => {
+    switch (currentTheme) {
+      case 'blue':
+        return 'rgba(97, 218, 251, 0.1)'; // Variante légère de bleu
+      case 'pink':
+        return 'rgba(255, 20, 147, 0.1)'; // Variante légère de rose
+      case 'green':
+        return 'rgba(0, 255, 0, 0.1)'; // Variante légère de vert
+      default:
+        return 'rgba(97, 218, 251, 0.1)';
+    }
+  };
+
+  return {
+    backgroundColor: getCardBackgroundColor(),
+    color: colors.text,
+    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    backdropFilter: 'blur(5px)',
+    padding: theme.spacing(3), // Augmenter le padding
+    height: '100%', // Assurer une hauteur constante
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  };
+});
 
 const Home: React.FC = () => {
   const { colors } = useTheme();
@@ -92,13 +125,13 @@ const Home: React.FC = () => {
         <Container>
           {/* Section Hero */}
           <ContentFrame>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h2" gutterBottom style={{ fontSize: '2.5rem' }}>
               Créez votre présence en ligne avec élégance
             </Typography>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom style={{ fontSize: '1.5rem' }}>
               Boldpixel : Des sites web sur mesure qui captivent votre audience et boostent votre visibilité
             </Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" style={{ fontSize: '1.1rem' }}>
               Découvrez nos services innovants pour transformer votre vision en réalité numérique
             </Typography>
             <StylishButton onClick={() => navigate('/services')}>Nos Services</StylishButton>
@@ -133,14 +166,14 @@ const Home: React.FC = () => {
                 }
               ].map((item, index) => (
                 <Grid item xs={12} md={4} key={index}>
-                  <Paper elevation={3} sx={{ padding: 2, height: '100%' }}>
-                    <Typography variant="h5" gutterBottom>
+                  <StyledCard elevation={3} sx={{ padding: 2, height: '100%' }}>
+                    <Typography variant="h5" gutterBottom style={{ fontSize: '1.3rem' }}>
                       {item.title}
                     </Typography>
-                    <Typography>
+                    <Typography style={{ fontSize: '1rem' }}>
                       {item.description}
                     </Typography>
-                  </Paper>
+                  </StyledCard>
                 </Grid>
               ))}
             </Grid>
@@ -210,7 +243,7 @@ const Home: React.FC = () => {
                 }
               ].map((client, index) => (
                 <Grid item xs={12} md={4} key={index}>
-                  <Paper elevation={3} sx={{ padding: 2, height: '100%' }}>
+                  <StyledCard elevation={3} sx={{ padding: 2, height: '100%' }}>
                     {/* Image du client */}
                     <img 
                       src={`/${client.image}`} 
@@ -223,7 +256,7 @@ const Home: React.FC = () => {
                     <Typography>
                       "{client.testimonial}"
                     </Typography>
-                  </Paper>
+                  </StyledCard>
                 </Grid>
               ))}
             </Grid>
@@ -274,7 +307,7 @@ const Home: React.FC = () => {
                 }
               ].map((project, index) => (
                 <Grid item xs={12} md={4} key={index}>
-                  <Paper elevation={3} sx={{ padding: 2, height: '100%' }}>
+                  <StyledCard elevation={3} sx={{ padding: 2, height: '100%' }}>
                     {/* Image du projet */}
                     <img 
                       src={`/${project.image}`} 
@@ -291,7 +324,7 @@ const Home: React.FC = () => {
                       Technologies : {project.technologies}
                     </Typography>
                     <StylishButton onClick={() => navigate(`/portfolio/${index + 1}`)}>Voir le projet</StylishButton>
-                  </Paper>
+                  </StyledCard>
                 </Grid>
               ))}
             </Grid>
@@ -336,7 +369,7 @@ const Home: React.FC = () => {
                 }
               ].map((feature, index) => (
                 <Grid item xs={12} md={4} key={index}>
-                  <Paper elevation={3} sx={{ padding: 2, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <StyledCard elevation={3} sx={{ padding: 2, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     {/* Icône de la fonctionnalité */}
                     {feature.icon && (
                       <img 
@@ -351,7 +384,7 @@ const Home: React.FC = () => {
                     <Typography>
                       {feature.description}
                     </Typography>
-                  </Paper>
+                  </StyledCard>
                 </Grid>
               ))}
             </Grid>
