@@ -76,7 +76,7 @@ const PaintSplashBackground: React.FC<PaintSplashBackgroundProps> = ({ initialCo
     };
   }, [initialColor]);
 
-  return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }} />;
+  return <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, width: '10%', height: '50%', zIndex: -1 }} />;
 };
 
 export default PaintSplashBackground;

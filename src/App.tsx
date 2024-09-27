@@ -40,7 +40,6 @@ const AppWrapper = styled('div')({
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
-  paddingTop: '80px', // Ajout de cette ligne
 });
 
 const GlassEffect = styled('div')({

@@ -12,4 +12,6 @@ code {
     monospace;
 }
 
-/* Supprimer les styles pour DialButton */
+#tsparticless {
+  width: 150px;
+}

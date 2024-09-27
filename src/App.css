@@ -45,3 +45,7 @@ body {
     transform: rotate(360deg);
   }
 }
+
+canvas {
+  width: 10px;
+}

@@ -13,7 +13,7 @@ const AnimatedBackground: React.FC = () => {
 
     return (
         <Particles
-            id="tsparticles"
+            id="tsparticless"
             init={particlesInit}
             options={{
                 background: {
