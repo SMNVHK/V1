@@ -7,7 +7,6 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Pricing from './pages/Pricing';
-import AnimatedBackground from './components/AnimatedBackground';
 import Portfolio from './pages/Portfolio';
 import { ThemeProvider } from './components/ThemeSwitch';
 import { createGlobalStyle } from 'styled-components';
@@ -50,17 +49,20 @@ const GlassEffect = styled('div')({
   height: '100%',
   background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%)',
   backdropFilter: 'blur(2px)',
-  zIndex: 0, // Changé de 1 à 0
+  zIndex: 0, // Assurez-vous qu'il est derrière les autres composants
   pointerEvents: 'none',
 });
 
 const PageContent = styled('div')({
+  flex: 1,
+  display: 'flex',
   fontFamily: '"Roboto Condensed", Arial, sans-serif',
   fontWeight: 300,
-  paddingTop: '0', // Changé de 80px à 0
+  paddingTop: '80px', // Rétabli le padding pour éviter le chevauchement
   minHeight: '100vh',
-  display: 'flex',
   flexDirection: 'column',
+  position: 'relative',
+  zIndex: 1,
 });
 
 const App: React.FC = () => {
@@ -70,7 +72,7 @@ const App: React.FC = () => {
         <CssBaseline />
         <Router>
           <AppWrapper>
-            <AnimatedBackground />
+            {/* Supprimé : <AnimatedBackground /> */}
             <GlassEffect />
             <Header />
             <PageContent>

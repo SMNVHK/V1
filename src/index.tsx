@@ -6,26 +6,22 @@ import reportWebVitals from './reportWebVitals';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
-  body {
-    font-family: 'Roboto Condensed', sans-serif;
-    font-weight: 300;
+  body, #root {
     margin: 0;
     padding: 0;
+    min-height: 100vh;
   }
 
   #root {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
   }
 
-  // Appliquer la police à tous les textes des contenus des pages
   p, h1, h2, h3, h4, h5, h6, span, div {
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 300;
   }
 
-  // Exceptions pour le titre boldpixel, les menus du header et les menus du mouse-hover
   .boldpixel-title, .header-menu, .mouse-hover-menu {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: bold;

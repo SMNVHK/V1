@@ -6,6 +6,19 @@ import VideoBackground from '../components/VideoBackground';
 import { useTheme } from '../components/ThemeSwitch';
 import StylishButton from '../components/StylishButton';
 
+const getVideoSource = (currentTheme: string) => {
+  switch (currentTheme) {
+    case 'green':
+      return '/videos/background-green.mp4';
+    case 'blue':
+      return '/videos/background-blue.mp4';
+    case 'pink':
+      return '/videos/background-pink.mp4';
+    default:
+      return '/videos/background-blue.mp4';
+  }
+};
+
 const PageContent = styled('div')({
   minHeight: '100vh',
   position: 'relative',
@@ -61,7 +74,12 @@ const projects = [
 ];
 
 const Portfolio: React.FC = () => {
-  const { colors } = useTheme();
+  const { colors, currentTheme } = useTheme();
+  const [videoSource, setVideoSource] = React.useState(getVideoSource(currentTheme));
+
+  React.useEffect(() => {
+    setVideoSource(getVideoSource(currentTheme));
+  }, [currentTheme]);
 
   return (
     <motion.div
@@ -72,7 +90,7 @@ const Portfolio: React.FC = () => {
       transition={pageTransition}
       style={{ minHeight: '100vh', paddingTop: '80px' }}
     >
-      <VideoBackground style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1 }} />
+      <VideoBackground key={videoSource} videoSource={videoSource} />
       <PageContent>
         <Container>
           <ContentFrame>

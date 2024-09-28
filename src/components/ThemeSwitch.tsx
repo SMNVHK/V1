@@ -60,5 +60,7 @@ export const useTheme = () => {
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
+  const { colors, currentTheme } = context;
+  console.log('Theme values:', { colors, currentTheme });
   return context;
 };

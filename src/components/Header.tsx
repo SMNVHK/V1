@@ -180,7 +180,7 @@ const Header: React.FC = () => {
             </Title>
           </LogoContainer>
           <ButtonContainer>
-            {['ACCUEIL', 'SERVICES', 'TARIFS', 'PORTFOLIO'].map((text, index) => (
+            {['ACCUEIL', 'SERVICES', 'PRICING', 'PORTFOLIO'].map((text, index) => (
               <NavButton
                 key={index}
                 className="header-menu"

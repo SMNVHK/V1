@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 
 interface VideoBackgroundProps {
   style?: React.CSSProperties;
+  videoSource: string;
 }
 
 const VideoWrapper = styled('div')({
@@ -15,7 +16,7 @@ const VideoWrapper = styled('div')({
   zIndex: -1,
 });
 
-const VideoBackground: React.FC<VideoBackgroundProps> = ({ style }) => {
+const VideoBackground: React.FC<VideoBackgroundProps> = ({ style, videoSource }) => {
   return (
     <VideoWrapper style={style}>
       <video
@@ -28,7 +29,7 @@ const VideoBackground: React.FC<VideoBackgroundProps> = ({ style }) => {
           objectFit: 'cover',
         }}
       >
-        <source src="/path/to/your/video.mp4" type="video/mp4" />
+        <source src={videoSource} type="video/mp4" />
         Votre navigateur ne supporte pas la vidéo HTML5.
       </video>
     </VideoWrapper>
