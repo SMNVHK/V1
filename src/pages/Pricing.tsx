@@ -260,7 +260,10 @@ const Pricing: React.FC = () => {
               container 
               spacing={2} 
               justifyContent="center"
-              style={{ margin: '0 auto', maxWidth: isMobile ? '300px' : '100%' }} // Ajout de cette ligne
+              style={{ 
+                margin: '0 auto', 
+                maxWidth: isMobile ? '300px' : '800px' // Modifié cette ligne
+              }}
             >
               {features.map((feature, index) => (
                 <Grid item key={index} xs={6} sm={3}>
