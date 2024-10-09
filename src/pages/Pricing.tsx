@@ -46,7 +46,7 @@ const CentralImage = styled('img')({
 
 const TitleCard = styled(Card)(({ theme }) => ({
   position: 'absolute',
-  top: '5%',
+  top: '0%',
   left: '50%',
   transform: 'translateX(-50%)',
   zIndex: 2,
