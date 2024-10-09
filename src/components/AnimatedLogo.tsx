@@ -19,24 +19,18 @@ const LogoWrapper = styled(motion.div)({
   overflow: 'visible',
 });
 
-const LogoImage = styled(motion.img)({
-  width: '100%',
-  height: '100%',
-  objectFit: 'contain',
-  position: 'relative',
-  zIndex: 2,
-});
+// Suppression de LogoImage
 
 const MenuContainer = styled(motion.div)<{ bgcolor: string }>(({ bgcolor }) => ({
   position: 'absolute',
-  left: '94%',
-  top: 'calc(35% + 5px)', // Ajouté 1px ici
-  transform: 'translateX(-50%)',
+  left: '50%', // Modifié : centré par rapport au titre
+  top: 'calc(35% + 5px)',
+  transform: 'translateX(-50%)', // Modifié : centré par rapport au titre
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 999, // Réduisez cette valeur pour qu'elle soit inférieure au z-index du header
+  zIndex: 999,
   padding: '2px 10px',
   backgroundColor: bgcolor,
   borderRadius: '0 0 5px 5px',
@@ -52,7 +46,7 @@ const MenuItem = styled(motion(Link))<{ textcolor: string }>(({ textcolor }) => 
   fontSize: '0.8rem',
   fontWeight: 'bold',
   cursor: 'pointer',
-  zIndex: 999, // Assurez-vous que cette valeur est inférieure au z-index du header
+  zIndex: 999,
   position: 'relative',
   overflow: 'hidden',
   fontFamily: '"Space Grotesk", sans-serif',
@@ -73,22 +67,15 @@ const AnimatedLogo: React.FC<AnimatedLogoProps> = ({ isHovered }) => {
 
   return (
     <LogoWrapper>
-      <LogoImage
-        src="/images/boldpixel-logo.png"
-        alt="BoldPixel Logo"
-        animate={{
-          filter: isHovered ? `brightness(1.2) drop-shadow(0 0 15px white)` : 'brightness(1)',
-        }}
-        transition={{ duration: 0.3 }}
-      />
+      {/* Suppression de LogoImage */}
       <AnimatePresence>
         {isHovered && (
           <MenuContainer
             className="mouse-hover-menu"
             bgcolor={headerColor}
-            initial={{ opacity: 0, y: -6, scaleY: 0 }} // Changé de -5 à -6
-            animate={{ opacity: 1, y: 1, scaleY: 1 }} // Ajouté 1px ici
-            exit={{ opacity: 0, y: -6, scaleY: 0 }} // Changé de -5 à -6
+            initial={{ opacity: 0, y: -6, scaleY: 0 }}
+            animate={{ opacity: 1, y: 1, scaleY: 1 }}
+            exit={{ opacity: 0, y: -6, scaleY: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
             {menuItems.map((item, index) => (

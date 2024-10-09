@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Menu, MenuItem, Box, Typography } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Menu, MenuItem, Box, Typography, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
 import { useTheme } from './ThemeSwitch';
@@ -12,74 +12,88 @@ const HeaderWrapper = styled('header')({
   top: 0,
   left: 0,
   right: 0,
-  zIndex: 1100, // Cette valeur doit être supérieure au z-index du menu déroulant
-  height: '80px', // Assurez-vous que cette hauteur correspond à votre design
-  // ... autres styles
+  zIndex: 1100,
+  height: '80px',
 });
 
 const StyledAppBar = styled(AppBar)<{ bgcolor: string }>(({ bgcolor }) => ({
   backgroundColor: `${bgcolor}CC`,
   backdropFilter: 'blur(10px)',
   boxShadow: 'none',
-  zIndex: 1100, // Assurez-vous que cette valeur est supérieure au z-index du menu déroulant
+  zIndex: 1100,
   height: '80px',
   display: 'flex',
   justifyContent: 'center',
   fontFamily: 'Manrope, sans-serif',
 }));
 
-const StyledToolbar = styled(Toolbar)({
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  height: '100%',
-});
-
-const LogoContainer = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  position: 'absolute',
-  top: '3px', // Remonter de 3 pixels
-  left: '5px', // Décalé encore plus à gauche
-  zIndex: 1001,
-});
-
-const Title = styled(motion.div)<{ textcolor: string }>(({ textcolor }) => ({
-  fontWeight: 'bold',
-  fontSize: '76px',
-  color: textcolor,
-  textShadow: '0 0 5px rgba(97, 218, 251, 0.3)', // Diminuer l'intensité du glow
-  marginLeft: '-15px',
-  marginTop: '-139px',
-  fontFamily: '"Space Grotesk", sans-serif',
-  letterSpacing: '-8px',
-  cursor: 'pointer', // Ajouté pour indiquer que c'est interactif
-}));
-
-const ButtonContainer = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  marginLeft: 'auto',
-  marginRight: '40px', // Ajouté pour déplacer les boutons vers la gauche
-  '& > *': {
-    marginLeft: '20px', // Augmenté l'espacement entre les boutons
-  },
-});
-
-const ColorBubble = styled('div')<{ color: string }>(({ color }) => ({
-  width: '20px',
-  height: '20px',
-  borderRadius: '50%',
-  backgroundColor: color,
-  cursor: 'pointer',
-}));
-
-type ThemeType = 'blue' | 'pink' | 'green';
-
 const Header: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { setTheme, colors, currentTheme } = useTheme();
   const navigate = useNavigate();
+
+  const isMobile = useMediaQuery('(max-width:768px)');
+
+  const StyledToolbar = styled(Toolbar)({
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100%',
+    padding: '0 20px',
+  });
+
+  const LogoContainer = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    position: 'absolute',
+    top: '3px',
+    left: isMobile ? '10px' : '20px',
+    zIndex: 1001,
+  });
+
+  const Title = styled(motion.div)<{ textcolor: string }>(({ textcolor }) => ({
+    fontWeight: 'bold',
+    fontSize: isMobile ? '48px' : '78px',
+    color: textcolor,
+    textShadow: '0 0 5px rgba(97, 218, 251, 0.3)',
+    marginLeft: isMobile ? '-80px' : '-100px',
+    marginTop: '-139px',
+    fontFamily: '"Space Grotesk", sans-serif',
+    letterSpacing: isMobile ? '-4px' : '-8px',
+    cursor: 'pointer',
+  }));
+
+  const ButtonContainer = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: 'auto',
+    '& > *': {
+      marginLeft: '20px',
+    },
+  });
+
+  const ColorBubble = styled('div')<{ color: string }>(({ color }) => ({
+    width: isMobile ? '16px' : '20px',
+    height: isMobile ? '16px' : '20px',
+    borderRadius: '50%',
+    backgroundColor: color,
+    cursor: 'pointer',
+  }));
+
+  const StyledMenu = styled(Menu)(({ theme }) => ({
+    '& .MuiPaper-root': {
+      width: isMobile ? '200px' : 'auto',
+      right: isMobile ? '0 !important' : 'auto',
+      left: 'auto !important',
+    },
+  }));
+
+  const ColorBubbleContainer = styled(Box)({
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: '8px',
+  });
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -89,7 +103,7 @@ const Header: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleThemeChange = (theme: ThemeType) => {
+  const handleThemeChange = (theme: 'blue' | 'pink' | 'green') => {
     setTheme(theme);
     handleClose();
   };
@@ -111,7 +125,7 @@ const Header: React.FC = () => {
       case 'blue':
         return '#61dafb';
       case 'pink':
-        return '#FF1493'; // Rose plus foncé pour une meilleure visibilité
+        return '#FF1493';
       case 'green':
         return '#00FF00';
       default:
@@ -121,23 +135,18 @@ const Header: React.FC = () => {
 
   const NavButton = styled(motion.div)<{ textcolor: string; themecolor: string }>(({ textcolor, themecolor }) => ({
     fontWeight: 'bold',
-    fontSize: '20px', // Augmenté encore la taille de la police
+    fontSize: '20px',
     color: textcolor,
-    textShadow: '0 0 3px rgba(97, 218, 251, 0.5)',
-    fontFamily: '"Space Grotesk", sans-serif',
-    letterSpacing: '-0.5px',
     cursor: 'pointer',
-    padding: '8px 16px', // Ajout de padding pour agrandir le bouton
     position: 'relative',
-    overflow: 'hidden',
     '&::after': {
       content: '""',
       position: 'absolute',
-      bottom: 0,
+      bottom: '-5px',
       left: 0,
       width: '100%',
       height: '2px',
-      background: themecolor, // Utilisation de la couleur du thème
+      backgroundColor: themecolor,
       transform: 'scaleX(0)',
       transformOrigin: 'right',
       transition: 'transform 0.3s ease',
@@ -149,15 +158,22 @@ const Header: React.FC = () => {
   }));
 
   const buttonVariants = {
-    hover: (themecolor: string) => ({
-      backgroundColor: `${themecolor}1A`, // Ajout d'une transparence de 10%
+    hover: {
+      backgroundColor: `${getThemeColor()}33`,
       transition: { duration: 0.3 }
-    }),
-    tap: (themecolor: string) => ({
-      backgroundColor: `${themecolor}33`, // Ajout d'une transparence de 20%
+    },
+    tap: {
+      backgroundColor: `${getThemeColor()}4D`,
       transition: { duration: 0.1 }
-    })
+    }
   };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    handleClose();
+  };
+
+  const menuItems = ['ACCUEIL', 'SERVICES', 'PRICING', 'PORTFOLIO'];
 
   return (
     <HeaderWrapper>
@@ -180,21 +196,25 @@ const Header: React.FC = () => {
             </Title>
           </LogoContainer>
           <ButtonContainer>
-            {['ACCUEIL', 'SERVICES', 'PRICING', 'PORTFOLIO'].map((text, index) => (
-              <NavButton
-                key={index}
-                className="header-menu"
-                textcolor={colors.text}
-                themecolor={getThemeColor()} // Ajout de la couleur du thème
-                onClick={() => navigate(text === 'ACCUEIL' ? '/' : `/${text.toLowerCase()}`)}
-                variants={buttonVariants}
-                custom={getThemeColor()} // Passage de la couleur du thème aux variants
-                whileHover="hover"
-                whileTap="tap"
-              >
-                {text}
-              </NavButton>
-            ))}
+            {!isMobile && (
+              <>
+                {menuItems.map((text, index) => (
+                  <NavButton
+                    key={index}
+                    className="header-menu"
+                    textcolor={colors.text}
+                    themecolor={getThemeColor()}
+                    onClick={() => handleNavigation(text === 'ACCUEIL' ? '/' : `/${text.toLowerCase()}`)}
+                    variants={buttonVariants}
+                    custom={getThemeColor()}
+                    whileHover="hover"
+                    whileTap="tap"
+                  >
+                    {text}
+                  </NavButton>
+                ))}
+              </>
+            )}
             <IconButton
               size="large"
               edge="end"
@@ -205,7 +225,7 @@ const Header: React.FC = () => {
               <MenuIcon />
             </IconButton>
           </ButtonContainer>
-          <Menu
+          <StyledMenu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleClose}
@@ -216,16 +236,31 @@ const Header: React.FC = () => {
               },
             }}
           >
-            <MenuItem onClick={() => handleThemeChange('blue')}>
-              <ColorBubble color="#3f51b5" />
-            </MenuItem>
-            <MenuItem onClick={() => handleThemeChange('pink')}>
-              <ColorBubble color="#f50057" />
-            </MenuItem>
-            <MenuItem onClick={() => handleThemeChange('green')}>
-              <ColorBubble color="#4caf50" />
-            </MenuItem>
-          </Menu>
+            {isMobile && menuItems.map((text, index) => (
+              <MenuItem key={index} onClick={() => handleNavigation(text === 'ACCUEIL' ? '/' : `/${text.toLowerCase()}`)}>
+                {text}
+              </MenuItem>
+            ))}
+            {isMobile ? (
+              <ColorBubbleContainer>
+                <ColorBubble color="#3f51b5" onClick={() => handleThemeChange('blue')} />
+                <ColorBubble color="#f50057" onClick={() => handleThemeChange('pink')} />
+                <ColorBubble color="#4caf50" onClick={() => handleThemeChange('green')} />
+              </ColorBubbleContainer>
+            ) : (
+              <>
+                <MenuItem onClick={() => handleThemeChange('blue')}>
+                  <ColorBubble color="#3f51b5" />
+                </MenuItem>
+                <MenuItem onClick={() => handleThemeChange('pink')}>
+                  <ColorBubble color="#f50057" />
+                </MenuItem>
+                <MenuItem onClick={() => handleThemeChange('green')}>
+                  <ColorBubble color="#4caf50" />
+                </MenuItem>
+              </>
+            )}
+          </StyledMenu>
         </StyledToolbar>
       </StyledAppBar>
     </HeaderWrapper>
