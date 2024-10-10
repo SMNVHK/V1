@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Typography, Container, Grid, Paper } from '@mui/material';
+import { Typography, Container, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import VideoBackground from '../components/VideoBackground';
 import { useTheme } from '../components/ThemeSwitch';
-import StylishButton from '../components/StylishButton';
+import Carousel3D from '../components/Carousel3D';
+import type { ProjectItem } from '../components/Carousel3D';
 
 const getVideoSource = (currentTheme: string) => {
   switch (currentTheme) {
@@ -39,7 +40,10 @@ const ContentFrame = styled('div')(({ theme }) => ({
   color: theme.palette.text.primary,
   marginBottom: theme.spacing(4),
   marginTop: theme.spacing(4),
-  flex: 1,
+  width: '100%', // Ajouté pour s'assurer que le cadre occupe toute la largeur
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -47,7 +51,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   backgroundColor: 'rgba(255, 255, 255, 0.1)',
   backdropFilter: 'blur(10px)',
-  color: 'white',
+  borderRadius: '15px',
+  color: theme.palette.text.primary,
 }));
 
 const pageVariants = {
@@ -66,12 +71,44 @@ const projectVariants = {
   hover: { scale: 1.05 }
 };
 
-const projects = [
-  { title: 'Projet 1', description: 'Description du projet 1' },
-  { title: 'Projet 2', description: 'Description du projet 2' },
-  { title: 'Projet 3', description: 'Description du projet 3' },
-  // Ajoutez d'autres projets ici
+const projects: ProjectItem[] = [
+  {
+    title: 'Voyager 2.0',
+    description: 'Une autre façon de voyager',
+    thumbnail: '/images/voyager_accueil.png',
+    technologies: ['Next.js App router', 'react-three-fiber', 'Lenis', 'Theatre.js'],
+    gallery: [
+      '/images/service_1.png',
+      '/images/voyager_accueil2.png',
+      '/images/destinations_2.png'
+    ],
+  },
+  {
+    title: 'Projet 2',
+    description: 'Description du projet 2',
+    thumbnail: '',
+    technologies: [],
+    gallery: [],
+  },
+  {
+    title: 'Projet 3',
+    description: 'Description du projet 3',
+    thumbnail: '',
+    technologies: [],
+    gallery: [],
+  },
+  // Ajoutez d'autres projets si nécessaire
 ];
+
+const PortfolioTitle = styled(Typography)(({ theme }) => ({
+  fontSize: '3rem',
+  fontWeight: 'bold',
+  color: '#ffffff',
+  textShadow: '0 0 10px rgba(0,255,255,0.5), 0 0 20px rgba(0,255,255,0.3), 0 0 30px rgba(0,255,255,0.2)',
+  marginBottom: theme.spacing(4),
+  textAlign: 'center',
+  fontFamily: "'Orbitron', sans-serif", // Assurez-vous d'avoir importé cette police si ce n'est pas déjà fait
+}));
 
 const Portfolio: React.FC = () => {
   const { colors, currentTheme } = useTheme();
@@ -92,31 +129,12 @@ const Portfolio: React.FC = () => {
     >
       <VideoBackground key={videoSource} videoSource={videoSource} />
       <PageContent>
-        <Container>
+        <Container maxWidth="lg">
           <ContentFrame>
-            <Typography variant="h2" gutterBottom style={{ color: colors.text }}>
+            <PortfolioTitle variant="h1">
               Notre Portfolio
-            </Typography>
-            <Grid container spacing={4}>
-              {projects.map((project, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <motion.div
-                    whileHover="hover"
-                    variants={projectVariants}
-                  >
-                    <StyledPaper style={{ backgroundColor: colors.background, color: colors.text }}>
-                      <Typography variant="h5" gutterBottom>
-                        {project.title}
-                      </Typography>
-                      <Typography variant="body1" paragraph>
-                        {project.description}
-                      </Typography>
-                      <StylishButton>Voir le projet</StylishButton>
-                    </StyledPaper>
-                  </motion.div>
-                </Grid>
-              ))}
-            </Grid>
+            </PortfolioTitle>
+            <Carousel3D items={projects} />
           </ContentFrame>
         </Container>
       </PageContent>
